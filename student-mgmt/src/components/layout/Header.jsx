@@ -1,7 +1,7 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
 import { RiMenuLine } from 'react-icons/ri'
-import { getDisplayName, getSessionUser, isAdminUser } from '../../utils/session'
+import { getDisplayName, getSessionUser, getUserRole } from '../../utils/session'
 
 const titles = {
   '/dashboard': 'Dashboard',
@@ -18,6 +18,8 @@ export default function Header({ collapsed, onMobileOpen }) {
   const user = getSessionUser()
   const name = getDisplayName(user)
   const initials = name.split(/\s+/).map(part => part[0]).join('').slice(0, 2).toUpperCase()
+  const role = getUserRole(user)
+  const roleLabel = role === 'admin' || role === 'administrator' ? 'Admin' : role === 'user' ? 'User' : 'Unknown role'
 
   return (
     <header className={`fixed top-0 right-0 h-16 bg-white border-b border-gray-100 z-30 flex items-center px-4 sm:px-6 gap-4 transition-all duration-300 ${collapsed ? 'md:left-16' : 'md:left-60'} left-0`}>
@@ -36,7 +38,7 @@ export default function Header({ collapsed, onMobileOpen }) {
           <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-semibold">{initials}</div>
           <div className="hidden sm:block">
             <p className="text-sm font-medium text-gray-800 leading-tight max-w-36 truncate">{name}</p>
-            <p className="text-xs text-gray-400">{isAdminUser(user) ? 'Administrator' : 'School user'}</p>
+            <p className="text-xs text-gray-400">{roleLabel}</p>
           </div>
         </div>
       </div>

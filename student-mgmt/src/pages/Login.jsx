@@ -31,10 +31,11 @@ export default function Login() {
       const result = await authService.login(form)
       localStorage.setItem('token', result.token)
       localStorage.setItem('auth', 'true')
-      const sessionUser = result.user || {
-        fullName: result.fullName || result.name || form.email.trim().split('@')[0],
-        email: result.email || form.email.trim(),
-        role: result.role,
+      const sessionUser = {
+        ...(result.user || {}),
+        fullName: result.user?.fullName || result.user?.full_name || result.fullName || result.name || form.email.trim().split('@')[0],
+        email: result.user?.email || result.email || form.email.trim(),
+        role: result.user?.role || result.role || result.user?.userType || result.user?.user_type,
       }
       localStorage.setItem('user', JSON.stringify(sessionUser))
       navigate('/dashboard')

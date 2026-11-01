@@ -1,7 +1,7 @@
 import { mockStudents, mockClasses, mockAttendance, mockActivities } from '../data/mockData'
 
 const API_BASE_URL = (
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:8080"
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:8081"
 ).replace(/\/$/, "");
 
 const readApiError = async (response) => {

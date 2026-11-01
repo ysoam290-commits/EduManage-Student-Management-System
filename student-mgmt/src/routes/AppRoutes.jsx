@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
+import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
 import Sidebar from '../components/layout/Sidebar'
 import Header from '../components/layout/Header'
 import Login from '../pages/Login'
@@ -39,6 +39,8 @@ function ProtectedLayout() {
 }
 
 export default function AppRoutes() {
+  // Re-read the signed-in role after navigation, including after login updates storage.
+  useLocation()
   const isAdmin = isAdminUser(getSessionUser())
   return (
     <Routes>

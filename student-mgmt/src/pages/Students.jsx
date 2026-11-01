@@ -9,11 +9,13 @@ import StudentCard from '../components/students/StudentCard'
 import { Select } from '../components/common/Input'
 import { studentService } from '../services/api'
 import { classOptions, statusOptions } from '../data/mockData'
-import { getSessionUser, isAdminUser } from '../utils/session'
+import { getSessionUser, getUserRole, isAdminUser } from '../utils/session'
 
 export default function Students() {
   const navigate = useNavigate()
-  const canManageStudents = isAdminUser(getSessionUser())
+  const sessionUser = getSessionUser()
+  const sessionRole = getUserRole(sessionUser)
+  const canManageStudents = isAdminUser(sessionUser)
   const [students, setStudents] = useState([])
   const [loading, setLoading] = useState(true)
   const [view, setView] = useState('table')
@@ -50,6 +52,9 @@ export default function Students() {
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-3">
+        <span className={`rounded-full px-3 py-1.5 text-xs font-semibold ${canManageStudents ? 'bg-blue-50 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>
+          Signed in as {sessionRole === 'administrator' ? 'Admin' : sessionRole ? sessionRole.toUpperCase() : 'Unknown role'}
+        </span>
         <div className="relative flex-1 min-w-[200px]">
           <RiSearchLine size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
@@ -72,7 +77,7 @@ export default function Students() {
           <button onClick={() => setView('grid')} className={`px-3 py-2 text-sm transition-colors ${view === 'grid' ? 'bg-blue-600 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}><RiLayoutGridLine size={16} /></button>
         </div>
         {canManageStudents && <Button icon={<RiUserAddLine size={15} />} onClick={() => navigate('/students/add')}>
-          Add student
+          Add new student
         </Button>}
       </div>
 
