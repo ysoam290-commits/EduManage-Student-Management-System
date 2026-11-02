@@ -79,6 +79,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource(
             @Value("${app.cors.allowed-origin:http://localhost:5173}") String origin
@@ -87,10 +88,10 @@ public class SecurityConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of(
+        // Allow your Vercel project deployments automatically
+        config.setAllowedOriginPatterns(List.of(
+                "https://edu-management-system-*.vercel.app",
                 cleanOrigin,
-                "https://edu-management-system-6yxhbrrrz-ysoams-projects.vercel.app",
-                "https://edu-management-system-mif5euhjm-ysoams-projects.vercel.app",
                 "http://localhost:5173",
                 "http://127.0.0.1:5173",
                 "http://localhost:3000",
@@ -98,11 +99,13 @@ public class SecurityConfig {
         ));
 
         config.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
+                "GET", "POST", "PUT", "PATCH",
+                "DELETE", "OPTIONS"
         ));
 
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(false);
+        config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
@@ -111,4 +114,5 @@ public class SecurityConfig {
 
         return source;
     }
+
 }
